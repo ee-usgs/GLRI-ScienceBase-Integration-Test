@@ -132,7 +132,6 @@
                     </webResources>
                 </configuration>
             </plugin>
-
         </plugins>
     </build>
 

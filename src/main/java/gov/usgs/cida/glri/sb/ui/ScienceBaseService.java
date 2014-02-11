@@ -12,10 +12,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -55,6 +57,9 @@ public class ScienceBaseService extends HttpServlet {
 			
 			String strResponse = query.getQueryResponse(reqMap);
 			response.setContentType(query.getRequestedFormat().getFullName() + "; charset=UTF-8");
+			
+			System.out.println("Sending back: \n[" + strResponse + "]\n");
+			
 			out.write(strResponse);
 		
 		} catch (Exception ex) {

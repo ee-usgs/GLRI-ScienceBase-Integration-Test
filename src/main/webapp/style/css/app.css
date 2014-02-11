@@ -24,3 +24,31 @@ th a:hover {
     border: 1px solid #000;
     background-color: #aaa;
 }
+
+
+.filter_label {
+	margin-top: 8px;
+}
+
+.boundingMap {
+	width: 512px;
+	height: 268px;
+	border: 1px solid #ccc;
+}
+
+.boundsGroup {
+	/*  		top	| right	| bottom	| left */
+	padding: 	6px		0px		0px		6px;
+	
+}
+
+.boundsValue {
+	font-size: 10px !important;
+	padding: 0px 3px 0px 5px !important;
+	text-align: left;
+}
+
+.adjustDropDown {
+	margin-top: 8px;
+	margin-left: 30px !important;
+}

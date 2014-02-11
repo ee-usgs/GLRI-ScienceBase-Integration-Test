@@ -7,11 +7,11 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		
 		
-
+		<!-- Tomcat 7 only 
 		<script type="text/javascript" src="webjars/jquery/2.1.0/jquery.js"></script>
+		-->
+		<script type="text/javascript" src="js/lib/jquery/2.1.0/jquery.js"></script>
 		<script type="text/javascript" src="js/lib/jquery-dynatable/0.3.1/jquery.dynatable.js"></script>
-		<script type="text/javascript" src="js/lib/OpenLayers/OpenLayers.js"></script>
-		
 		
 		<script type="text/javascript" src="js/app/main.js"></script>
 		
@@ -21,94 +21,279 @@
 		<link rel="stylesheet" type="text/css" href="style/css/app.css" />
 		<link rel="stylesheet" type="text/css" href="style/css/left-nav.css" />
 		
+		<!-- Twitter Bootstrap -->
+		<script type="text/javascript" src="js/lib/bootstrap/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="js/lib/bootstrap-select/bootstrap-select.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="js/lib/bootstrap/css/bootstrap.min.css"/>
+		<link rel="stylesheet" type="text/css" href="js/lib/bootstrap-select/bootstrap-select.min.css"/>
+		
+		<!-- Our Bootstrap Theme -->
+		<script type="text/javascript" src="style/themes/theme1/theme1.js"></script>
+		<link rel="stylesheet" type="text/css" href="style/themes/theme1/theme1.css"/>
+		
+		<!-- OpenLayers -->
+		<script type="text/javascript" src="js/lib/OpenLayers/OpenLayers.js"></script>
+		
         <title>Science Base Sample Query Page</title>
     </head>
     <body>
 		<jsp:include page="template/header.jsp" flush="true" />
-		<div class="colmask leftmenu">
-			<div class="colright">
-				<div class="colleft">
-					<div class="col1wrap">
-						<div class="col1">
-							<div id="lead-in">
-								<h1>GLRI to ScienceBase Query API Example</h1>
-								<p>All query are being submitted to the ScienceBase REST API.</p>
-								<p>
-									Choosing the <b>GLRI Results Only</b> option limits the results to the
-									<a href="https://www.sciencebase.gov/catalog/item/52e6a0a0e4b012954a1a238a">Great Lakes Restoration Initiative</a>
-									community of datasets.
-								</p>
+	<div class="container">
+		<div id="main_page" class="page_body_content">
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="well well-sm">
+						<h1>GLRI to ScienceBase Query API Example</h1>
+						<p>All query are being submitted to the ScienceBase REST API.</p>
+						<p>
+							Choosing the <b>GLRI Results Only</b> option limits the results to the
+							<a href="https://www.sciencebase.gov/catalog/item/52e6a0a0e4b012954a1a238a">Great Lakes Restoration Initiative</a>
+							community of datasets.
+						</p>
+					</div>
+				</div>
+			</div>
+<%-- 			<form role="form" id="sb-query-form" action="${context}/sciencebasequery" method="POST"> --%>
+			<form id="sb-query-form" action="ScienceBaseService">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="well">
+							<div class="row">
+								<div class="col-xs-6">		
+									<div class="row" style="padding-bottom: 10px;">
+										<div class="col-xs-4">
+											<label class="filter_label pull-right">Text Search</label>
+										</div>
+										<div class="col-xs-8">
+											<input type="text" class="form-control" id="text_query" name="text_query" style="width: 90%;">
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-xs-4">
+											<label class="filter_label pull-right">GRRI Study Area</label>
+										</div>
+										<div class="col-xs-8">
+											<select class="selectpicker pull-left" name="area" id="area_input" multiple title="Any" data-width="90%">
+												<option value="Lake Michigan Basin">Lake Michigan Basin</option>
+												<option value="Lake Erie Basin">Lake Erie Basin</option>
+												<option value="Lake Huron Basin">Lake Huron Basin</option>
+												<option value="Lake Superior Basin">Lake Superior Basin</option>
+												<option value="Lake Ontario Basin">Lake Ontario Basin</option>
+											</select>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-xs-4">
+											<label class="filter_label pull-right">Focus Area</label>
+										</div>
+										<div class="col-xs-8">
+											<select class="selectpicker pull-left" name="focus" id="focus_input" multiple title="Any" data-width="90%">
+												<option value="Toxic Substances">Toxic Substances</option>
+												<option value="Invasive Species">Invasive Species</option>
+												<option value="Nearshore Health">Nearshore Health</option>
+												<option value="Habitat & Wildlife">Habitat &amp; Wildlife</option>
+												<option value="Accountability">Accountability</option>
+											</select>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-xs-12">
+											<select class="selectpicker pull-left adjustDropDown" name="format" id="format" title="Result Format" data-style="btn-xs" data-width="auto">
+												<option value="json">JSON</option>
+												<option value="html">HTML</option>
+												<option value="xml">XML</option>
+											</select>
+											<div class="checkbox pull-left" style="margin-left: 20px;">
+												<label style="white-space: nowrap;">
+													<input type="checkbox" name="glri_only" id="glri_only" value="true" checked> GLRI Results Only?
+												</label>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-xs-12">
+											<input class="btn btn-primary btn-sm" id="query-submit" type="submit" value="Search" style="margin-left: 30px"/>
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-6">
+									<div class="row">
+										<div class="col-xs-12">
+											<div id="map" class="boundingMap"></div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-xs-4">
+											<div class="checkbox" style="margin-left: 6px;">
+												<label>
+													<input type="checkbox" name="drawBox" id="drawBox" value="box"> Draw Bounding Box
+												</label>
+											</div>
+										</div>
+										<div class="col-xs-7">
+											<div class="row">
+												<div class="col-xs-3 boundsGroup">
+													<div class="input-group input-group-sm">
+														<span class="input-group-addon boundsValue">xMin</span>
+														<input id="xmin_label" type="text" class="form-control boundsValue" style="width: 42px;" placeholder="-" disabled>
+													</div>
+												</div>
+												<div class="col-xs-3 boundsGroup">
+													<div class="input-group input-group-sm">
+														<span class="input-group-addon boundsValue">yMin</span>
+														<input id="ymin_label" type="text" class="form-control boundsValue" style="width: 42px;" placeholder="-" disabled>
+													</div>
+												</div>
+												<div class="col-xs-3 boundsGroup">
+													<div class="input-group input-group-sm">
+														<span class="input-group-addon boundsValue">xMax</span>
+														<input id="xmax_label" type="text" class="form-control boundsValue" style="width: 42px;" placeholder="-" disabled>
+													</div>
+												</div>
+												<div class="col-xs-3 boundsGroup">
+													<div class="input-group input-group-sm">
+														<span class="input-group-addon boundsValue">yMax</span>
+														<input id="ymax_label" type="text" class="form-control boundsValue" style="width: 42px;" placeholder="-" disabled>
+													</div>
+												</div>
+												<input type="hidden" id="spatial" name="spatial" value="">
+											</div>
+										</div>
+										<div class="col-xs-1"></div>
+									</div>
+									<div class="row">
+										<div class="col-xs-12">
+											<button id="clearMapButton" type="button" class="btn btn-default btn-xs" style="margin-left: 6px;">Clear Map Filter</button>
+										</div>
+									</div>							
+								</div>
 							</div>
-							<table id="query-results-table" class="hidden">
-								<thead>
-									<tr>
-										<th>Title</th>
-										<th>Summary</th>
-										<th>Url</th>
-									</tr>
-								</thead>
-								<tbody>
-
-								</tbody>
-							</table>
 						</div>
 					</div>
-					<div class="col2">
-						<div id="map" class="map"></div>
-						<form id="dummy" action="none">
-							<fieldset>
-								<div class="field">
-									<label for="drawBox">Draw Box</label>
-									<input type="checkbox" name="drawBox" id="drawBox" value="box"/>
-								</div>
-							</fieldset>
-						</form>
-						<form id="sb-query-form" action="ScienceBaseService">
-							<fieldset title="Standard ScienceBase Text Search">
-								<div class="field">
-									<label for="text_query_input">Text Query</label>
-									<input type="text" size="30" id="text_query_input" name="text_query"/>
-								</div>
-							</fieldset>
-							<fieldset title="GLRI Specific tags">
-								<div class="field">
-									<label for="area_input">GRRI Study Area</label>
-									<select id="area_input" name="area">
-										<option value="">Any</option>
-										<option value="Lake Michigan Basin">Lake Michigan Basin</option>
-										<option value="Lake Erie Basin">Lake Erie Basin</option>
-										<option value="Lake Huron Basin">Lake Huron Basin</option>
-										<option value="Lake Superior Basin">Lake Superior Basin</option>
-										<option value="Lake Ontario Basin">Lake Ontario Basin</option>
-									</select>
-								</div>
-								<div class="field">
-									<label for="focus_input">Focus Area</label>
-									<select id="focus_input" name="focus">
-										<option value="">Any</option>
-										<option value="Toxic Substances">Toxic Substances</option>
-										<option value="Invasive Species">Invasive Species</option>
-										<option value="Nearshore Health">Nearshore Health</option>
-										<option value="Habitat & Wildlife">Habitat &amp; Wildlife</option>
-										<option value="Accountability">Accountability</option>
-									</select>
-								</div>
-							</fieldset>
-							<fieldset title="Search Options">
-								<div class="field">
-									<label for="glri_only_input">GLRI Results Only?</label>
-									<input type="checkbox" checked="checked" id="glri_only_input" name="glri_only" value="true" />
-								</div>
-
-								<input type="hidden" id="format_input" name="format" value="json">
-								<input type="text" size=100" id="spatial_input" name="spatial" value="">
-								<input id="query-submit" type="submit" value="Submit"/>
-							</fieldset>
-						</form>
+				</div>
+			</form>
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="well">
+						<div class="row">
+							<div class="col-xs-12">
+								<table id="query-results-table">
+									<thead>
+										<tr>
+											<th>id</th>
+											<th>title</th>
+											<th>summary</th>
+										</tr>
+									</thead>
+									<tbody>
+			
+									</tbody>
+								</table>
+							</div>
+						</div>
 					</div>
-				</div><!-- colleft -->
-			</div><!-- colright -->
-		</div><!-- colmask -->
+				</div>
+			</div>
+		</div>
+	</div>
+		
+		<script type="text/javascript">
+			$(document).ready(
+				function() {
+					/* Kick off the fancy selects */
+					$('.selectpicker').selectpicker();
+		
+					/**
+					 * Build the OpenLayers map
+					 */
+					var boxControl;
+		
+					var lon = -85.47;
+					var lat = 45.35;
+					var zoom = 5.25;
+					var map, wmsLayer, boxLayer;
+		
+					function init() {
+						map = new OpenLayers.Map('map');
+		
+						wmsLayer = new OpenLayers.Layer.WMS("OpenLayers WMS",
+								"http://vmap0.tiles.osgeo.org/wms/vmap0?", {
+									layers : 'basic'
+								});
+		
+						boxLayer = new OpenLayers.Layer.Vector("Box layer");
+		
+						map.addLayers([ wmsLayer, boxLayer ]);
+						map.addControl(new OpenLayers.Control.LayerSwitcher());
+						map.addControl(new OpenLayers.Control.MousePosition());
+		
+						boxControl = new OpenLayers.Control.DrawFeature(boxLayer,
+								OpenLayers.Handler.RegularPolygon, {
+									handlerOptions : {
+										sides : 4,
+										irregular : true
+									}
+								});
+		
+						// register a listener for removing any boxes already drawn
+						boxControl.handler.callbacks.create = function(data) {
+							if (boxLayer.features.length > 0) {
+								boxLayer.removeAllFeatures();
+							}
+						}
+		
+						// register a listener for drawing a box
+						boxControl.events.register('featureadded', boxControl,
+								function(f) {
+		
+									// Variables for the geometry are: bottom/left/right/top
+									// Sciencebase requires bounds to look like: [xmin,ymin,xmax,ymax]
+									var extent = "["
+											+ f.feature.geometry.bounds.left + ","
+											+ f.feature.geometry.bounds.bottom
+											+ "," + f.feature.geometry.bounds.right
+											+ "," + f.feature.geometry.bounds.top
+											+ "]";
+									
+									$('#xmin_label').val(f.feature.geometry.bounds.left);
+									$('#ymin_label').val(f.feature.geometry.bounds.bottom);
+									$('#xmax_label').val(f.feature.geometry.bounds.right);
+									$('#ymax_label').val(f.feature.geometry.bounds.top);
+		
+									$('#spatial').val(extent);
+								});
+		
+						map.addControl(boxControl);
+		
+						map.setCenter(new OpenLayers.LonLat(lon, lat), 5);
+					}
+		
+					init();
+		
+					$('#drawBox').click(function() {
+						if ($(this).is(':checked')) {
+							boxControl.handler.stopDown = true;
+							boxControl.handler.stopUp = true;
+							boxControl.activate();
+						} else {
+							boxControl.handler.stopDown = false;
+							boxControl.handler.stopUp = false;
+							boxControl.deactivate();
+						}
+					});
+					
+					$('#clearMapButton').click(function() {
+						$('#spatial').val('');
+						$('#xmin_label').val('-');
+						$('#ymin_label').val('-');
+						$('#xmax_label').val('-');
+						$('#ymax_label').val('-');
+						
+						boxLayer.removeAllFeatures();
+						map.setCenter(new OpenLayers.LonLat(lon, lat), 5);				
+					});
+				});
+		</script>
 		<jsp:include page="template/footer.jsp" flush="true" />
     </body>
 </html>
