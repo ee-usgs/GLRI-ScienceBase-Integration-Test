@@ -25,8 +25,6 @@ $(document).ready(function(){
 		event.stopPropagation();
 		updateTable();
     });
-	
-	initSelectMap();
 });
 
 var dynamicTable = null;
@@ -84,71 +82,5 @@ function buildDataUrl() {
 }
 
 
-///////////
-// Map Functions
-///////////
-function initSelectMap() {
-	
-	var lon = -85.47;
-	var lat = 45.35;
-	var zoom = 5.25;
-	var map, wmsLayer, boxLayer;
-	
-	map = new OpenLayers.Map('map');
 
-	wmsLayer = new OpenLayers.Layer.WMS( "OpenLayers WMS",
-		"http://vmap0.tiles.osgeo.org/wms/vmap0?", {layers: 'basic'});
-
-	boxLayer = new OpenLayers.Layer.Vector("Box layer");
-
-	map.addLayers([wmsLayer, boxLayer]);
-	map.addControl(new OpenLayers.Control.LayerSwitcher());
-	map.addControl(new OpenLayers.Control.MousePosition());
-
-	boxControl = new OpenLayers.Control.DrawFeature(boxLayer,
-			OpenLayers.Handler.RegularPolygon, {
-				handlerOptions: {
-					sides: 4,
-					irregular: true
-				}
-			}
-		);
-
-	// register a listener for removing any boxes already drawn
-	boxControl.handler.callbacks.create = function(data) {
-		if(boxLayer.features.length > 0) {
-			boxLayer.removeAllFeatures();
-		}
-	};
-	
-	// register a listener for drawing a box
-	boxControl.events.register('featureadded', boxControl, function(f) {
-
-	  // Variables for the geometry are: bottom/left/right/top
-	  // Sciencebase requires bounds to look like: [xmin,ymin,xmax,ymax]
-	  var extent = "[" + f.feature.geometry.bounds.left +
-				   "," + f.feature.geometry.bounds.bottom +
-				   "," + f.feature.geometry.bounds.right +
-				   "," + f.feature.geometry.bounds.top + "]";
-
-	  $('#spatial_input').val(extent);
-	 });
-
-
-	map.addControl(boxControl);
-	map.setCenter(new OpenLayers.LonLat(lon, lat), 5);
-	
-	$('#drawBox').click(function() {
-		if($(this).is(':checked')) {
-			boxControl.handler.stopDown = true;
-			boxControl.handler.stopUp = true;
-			boxControl.activate();
-		} else {
-			boxControl.handler.stopDown = false;
-			boxControl.handler.stopUp = false;
-			boxControl.deactivate();
-		}
-	});
-	
-}
 
