@@ -54,7 +54,7 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-xs-4">
+				<div class="col-xs-3" style="width: 366px;">
 					<%-- 			<form role="form" id="sb-query-form" action="${context}/sciencebasequery" method="POST"> --%>
 					<form id="sb-query-form" action="ScienceBaseService">
 						<div class="row">
@@ -188,31 +188,22 @@
 						</div>
 					</form>
 				</div>
-				<div class="col-xs-8">
-					<div class="row">
-						<div class="col-xs-12">
-							<div class="well">
-								<div class="row">
-									<div class="col-xs-12">
-										<table id="query-results-table">
-											<thead>
-												<tr>
-													<th>Resource</th>
-													<th>id</th>
-													<th>title</th>
-													<th>summary</th>
-												</tr>
-											</thead>
-											<tbody>
-					
-											</tbody>
-										</table>
-									</div>
-								</div>
-							</div>
-						</div>
+				<div class="" style="padding-right:20px; margin-top: -50px;">
+					<table id="query-results-table">
+						<thead>
+							<tr>
+								<th>Resource</th>
+								<th>id</th>
+								<th>title</th>
+								<th>summary</th>
+							</tr>
+						</thead>
+						<tbody>
+
+						</tbody>
+					</table>
 					</div>
-				</div>					
+				</div>				
 			</div>
 		</div>
 	</div>
