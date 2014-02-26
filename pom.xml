@@ -3,7 +3,7 @@
 
     <groupId>gov.usgs.cida.glri</groupId>
     <artifactId>glri-catalog</artifactId>
-    <version>0.3-SNAPSHOT</version>
+    <version>0.3</version>
     <packaging>pom</packaging>
     <name>GLRI Catalog</name>
 	
